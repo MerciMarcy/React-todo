@@ -8,6 +8,7 @@ export const App = () => {
 
   const onChangeTodoText = (event) => setTodoText(event.target.value);
 
+  // 未完了のToDoへタスクを追加
   const onClickAdd = () => {
     if (todoText === "") return;
     const newTodos = [...incompleteTodos, todoText];
@@ -15,11 +16,24 @@ export const App = () => {
     setTodoText("");
   };
 
+  // 未完了のToDoからタスクを削除
   const onClickDelete = (index) => {
     const newTodos = [...incompleteTodos];
     // splice(何番目の要素, いくつ削除するか)
     newTodos.splice(index, 1);
     setIncompleteTodos(newTodos);
+  };
+
+  // 未完了のToDoから完了のToDOへタスクの移行
+  const onClickComplete = (index) => {
+    // 未完了のToDoからタスクを削除
+    const newIncompleteTodos = [...incompleteTodos];
+    newIncompleteTodos.splice(index, 1);
+    // 完了のToDoへタスクを追加
+    const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
+
+    setIncompleteTodos(newIncompleteTodos);
+    setCompleteTodos(newCompleteTodos);
   };
 
   return (
@@ -40,7 +54,7 @@ export const App = () => {
               <li key={todo}>
                 <div className="list-row">
                   <p>{todo}</p>
-                  <button>完了</button>
+                  <button onClick={() => onClickComplete(index)}>完了</button>
                   {/* 関数に引数を渡したいときは新たにアロー関数にする */}
                   <button onClick={() => onClickDelete(index)}>削除</button>
                 </div>
